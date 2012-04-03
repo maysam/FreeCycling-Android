@@ -8,24 +8,18 @@
       <script type="text/javascript" src="jquery.min.js"></script>
       <script type="text/javascript" src="jquery.ui.map.full.min.js"></script>
       <script type="text/javascript">
-         // once the device ready event fires, you can safely do your thing! -jm
-         
-        $(function() {
-        	
-
-                
-
+            
             // onSuccess Geolocation
             //
             function onSuccess(position) {
-            	console.log('Latitude: '           + position.coords.latitude              + '<br />' +
-                                    'Longitude: '          + position.coords.longitude             + '<br />' +
-                                    'Altitude: '           + position.coords.altitude              + '<br />' +
-                                    'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                                    'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                                    'Heading: '            + position.coords.heading               + '<br />' +
-                                    'Speed: '              + position.coords.speed                 + '<br />' +
-                                    'Timestamp: '          + new Date(position.timestamp)          + '<br />');
+            	console.log('Latitude: '           + position.coords.latitude              + "\r\n" +
+                                    'Longitude: '          + position.coords.longitude             + "\r\n" +
+                                    'Altitude: '           + position.coords.altitude              + "\r\n" +
+                                    'Accuracy: '           + position.coords.accuracy              + "\r\n" +
+                                    'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + "\r\n" +
+                                    'Heading: '            + position.coords.heading               + "\r\n" +
+                                    'Speed: '              + position.coords.speed                 + "\r\n" +
+                                    'Timestamp: '          + new Date(position.timestamp)          + "\r\n");
 				
 				$('#map_canvas').gmap(
 {
@@ -42,6 +36,7 @@
             }
 
             
+        $(function() {
 				navigator.geolocation.getCurrentPosition(onSuccess, onError);
 	        if(false)
 			$('#map_canvas').gmap({ 'center': '1.385573,103.098326',
@@ -91,8 +86,8 @@
 		        });
 		        */
 if(navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(function(position)
-	{
+	navigator.geolocation.getCurrentPosition(
+	function(position) {
 		$('#map_canvas').gmap('addMarker', {
 			latitude: position.coords.latitude,
 			longitude: position.coords.longitude,
@@ -109,11 +104,14 @@ if(navigator.geolocation) {
 			longitude: position.coords.longitude,
 			zoom: 8
 		});
-	}, function()	{		alert('Couldn\'t find you :(');	});
-			});
+	}, function()	{		
+	
+		alert('Couldnt find you :(');			
+	}	);
 	        // In the callback you can use "this" to call a function (e.g. this.get('map') instead of $('#map_canvas').gmap('get', 'map'))
 			
 }
+        });
         });
       </script>
  </head>
