@@ -6,13 +6,19 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.ui.map.full.min.js"></script>
+    <script type="text/javascript" src="log4j.js"></script>
+    
 </head>
 <body>
     <div id="map_canvas" style="height:320px;">map</div>
     under
     <script type="text/javascript">
+    	var log = log4javascript.getDefaultLogger();
+
     var map;
         function onSuccess(position) {
+	log.info("Hello world");
+	log.info(position.coords);
             map = $('#map_canvas').gmap(
                 {
                    // 'center': position.coords.latitude + ',' + position.coords.longitude,
@@ -28,6 +34,7 @@
             });
         }
         function onError(error) {
+			log.error(error.code);
             console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
