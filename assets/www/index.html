@@ -1,123 +1,111 @@
 <!doctype html>
 <html>
-  <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    
-      <script type="application/x-javascript" src="cordova-1.5.0.js"></script>      
-      <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-      <script type="text/javascript" src="jquery.min.js"></script>
-      <script type="text/javascript" src="jquery.ui.map.full.min.js"></script>
-      <script type="text/javascript">
-            
-            // onSuccess Geolocation
-            //
-            function onSuccess(position) {
-            	console.log('Latitude: '           + position.coords.latitude              + "\r\n" +
-                                    'Longitude: '          + position.coords.longitude             + "\r\n" +
-                                    'Altitude: '           + position.coords.altitude              + "\r\n" +
-                                    'Accuracy: '           + position.coords.accuracy              + "\r\n" +
-                                    'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + "\r\n" +
-                                    'Heading: '            + position.coords.heading               + "\r\n" +
-                                    'Speed: '              + position.coords.speed                 + "\r\n" +
-                                    'Timestamp: '          + new Date(position.timestamp)          + "\r\n");
-				
-				$('#map_canvas').gmap(
-{
-     latitude: position.coords.latitude,
-     longitude: position.coords.longitude,
-     maptype: 'TERRAIN',
-     zoom: 8});
-            }
-
-            // onError Callback receives a PositionError object
-            //
-            function onError(error) {
-                console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
-            }
-
-            
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script type="application/x-javascript" src="cordova-1.5.0.js"></script>      
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.ui.map.full.min.js"></script>
+</head>
+<body>
+    <div id="map_canvas" style="height:320px;">map</div>
+    under
+    <script type="text/javascript">
+    var map;
+        function onSuccess(position) {
+            map = $('#map_canvas').gmap(
+                {
+                   // 'center': position.coords.latitude + ',' + position.coords.longitude,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                   // maptype: 'TERRAIN',
+                  //  zoom: 8
+                }
+            );
+            google.maps.event.addListenerOnce(map, 'idle', function(){
+                
+                $('#map_canvas').gmap('addMarker', {'position': position.coords.latitude + ',' + position.coords.longitude, 'bounds': true}).gmap('option', 'zoom', 8);
+            });
+        }
+        function onError(error) {
+            console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+        }
+                navigator.geolocation.getCurrentPosition(onSuccess, onError);
         $(function() {
-				navigator.geolocation.getCurrentPosition(onSuccess, onError);
-	        if(false)
-			$('#map_canvas').gmap({ 'center': '1.385573,103.098326',
-	        						'zoom':	12	
-	        }).bind('tilesloaded', function(ev, map) {
-				console.log('tiles loaded finally');
-	        	//$('#map_canvas').css('height', window.screen.height);
-	        	$('#map_canvas').gmap('option', 'zoom', 12);
-	        	var marker = $('#map_canvas').gmap('addMarker', {'position': '1.37973333,103.8502107', 'bounds': true})
-	        	marker.click(function() {
-	        		$('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 1!'}, this);
-	        	});
-	        	$('#map_canvas').gmap('getCurrentPosition', function(position, status) {
-	        		if ( status === 'OK' ) {
-	        			var clientPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-	        			$('#map_canvas').gmap('addMarker', {'position': clientPosition, 'bounds': true});
-	        			$('#map_canvas').gmap('addShape', 'Circle', { 
-	        				'strokeWeight': 0, 
-	        				'fillColor': "#008595", 
-	        				'fillOpacity': 0.25, 
-	        				'center': clientPosition, 
-	        				'radius': 15, 
-	        				'clickable': false 
-	        			});
-	        		} else {
-						console.log('cannot ' + status);
-					}
-	        	});   
-				/*
-		        $('#map_canvas').gmap({'callback': function() {
-		        	var self = this; // we can't use "this" inside the click function (that refers to the marker object in this example)
-		        	self.addMarker({'position': '1.3973333,103.0502107', 'bounds': true}).click(function() {
-		        		self.openInfoWindow({'content': 'Hello World 2!'}, this);
-		        	});
-		        }});
-		        
-		        // addMarker returns a jQuery wrapped google.maps.Marker object 
-		        var $marker = $('#map_canvas').gmap('addMarker',
-		        		{'position': '1.37973333,103.0502107', 'bounds': true});
-		        $marker.click(function() {
-		        	$('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 3!'}, this);
-		        });
-		        // If you dont add a constructor ($('#map_canvas').gmap({'some_option':'some_value'});) the plugin will auto initialize 
-		        $('#map_canvas').gmap('addMarker', 
-		        		{'position': '1.7973333,103.0502107', 'bounds': true}).click(function() {
-		        	$('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 4!'}, this);
-		        });
-		        */
-if(navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(
-	function(position) {
-		$('#map_canvas').gmap('addMarker', {
-			latitude: position.coords.latitude,
-			longitude: position.coords.longitude,
-			content: 'You are here!',
-			icon: {
-				image: "images/gmap_pin.png", 
-				iconsize: [26, 46],
-				iconanchor: [12, 46]
-			},
-			popup: true
-		});
-		$('#map_canvas').gmap('centerAt', {
-			latitude: position.coords.latitude,
-			longitude: position.coords.longitude,
-			zoom: 8
-		});
-	}, function()	{		
-	
-		alert('Couldnt find you :(');			
-	}	);
-	        // In the callback you can use "this" to call a function (e.g. this.get('map') instead of $('#map_canvas').gmap('get', 'map'))
-			
-}
+       
+           google.maps.event.addListenerOnce($('#map_canvas'), 'idle', function(){
+
+                console.log('tiles loaded finally');
+                //$('#map_canvas').css('height', window.screen.height);
+                $('#map_canvas').gmap('option', 'zoom', 12);
+                var marker = $('#map_canvas').gmap('addMarker', {'position': '1.37973333,103.8502107', 'bounds': true})
+                marker.click(function() {
+                    $('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 1!'}, this);
+                });
+                $('#map_canvas').gmap('getCurrentPosition', function(position, status) {
+                    if ( status === 'OK' ) {
+                        var clientPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                        $('#map_canvas').gmap('addMarker', {'position': clientPosition, 'bounds': true});
+                        $('#map_canvas').gmap('addShape', 'Circle', { 
+                            'strokeWeight': 0, 
+                            'fillColor': "#008595", 
+                            'fillOpacity': 0.25, 
+                            'center': clientPosition, 
+                            'radius': 15, 
+                            'clickable': false 
+                        });
+                    } else {
+                        console.log('cannot ' + status);
+                    }
+                });   
+                /*
+                $('#map_canvas').gmap({'callback': function() {
+                    var self = this; // we can't use "this" inside the click function (that refers to the marker object in this example)
+                    self.addMarker({'position': '1.3973333,103.0502107', 'bounds': true}).click(function() {
+                        self.openInfoWindow({'content': 'Hello World 2!'}, this);
+                    });
+                }});
+                
+                // addMarker returns a jQuery wrapped google.maps.Marker object 
+                var $marker = $('#map_canvas').gmap('addMarker',
+                        {'position': '1.37973333,103.0502107', 'bounds': true});
+                $marker.click(function() {
+                    $('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 3!'}, this);
+                });
+                // If you dont add a constructor ($('#map_canvas').gmap({'some_option':'some_value'});) the plugin will auto initialize 
+                $('#map_canvas').gmap('addMarker', 
+                        {'position': '1.7973333,103.0502107', 'bounds': true}).click(function() {
+                    $('#map_canvas').gmap('openInfoWindow', {'content': 'Hello World 4!'}, this);
+                });
+                */
+    if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+    function(position) {
+        $('#map_canvas').gmap('addMarker', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            content: 'You are here!',
+            icon: {
+                image: "images/gmap_pin.png", 
+                iconsize: [26, 46],
+                iconanchor: [12, 46]
+            },
+            popup: true
+        });
+        $('#map_canvas').gmap('centerAt', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            zoom: 8
+        });
+    }, function()	{		
+
+        alert('Couldnt find you :(');			
+    }	);
+            // In the callback you can use "this" to call a function (e.g. this.get('map') instead of $('#map_canvas').gmap('get', 'map'))
+            
+    }
         });
         });
-      </script>
- </head>
- 
- 
- <body>
-  <div id="map_canvas" style="height:320px;">map</div>
- </body>
+    </script>
+</body>
 </html>
