@@ -21,23 +21,23 @@
 	log.info(position.coords);
             map = $('#map_canvas').gmap(
                 {
-                   // 'center': position.coords.latitude + ',' + position.coords.longitude,
+                    'center': position.coords.latitude + ',' + position.coords.longitude,
                     latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                   // maptype: 'TERRAIN',
-                  //  zoom: 8
+                    longitude: position.coords.longitude,
+                    maptype: 'TERRAIN',
+                    zoom: 16
                 }
-            );
-            google.maps.event.addListenerOnce(map, 'idle', function(){
-                
-                $('#map_canvas').gmap('addMarker', {'position': position.coords.latitude + ',' + position.coords.longitude, 'bounds': true}).gmap('option', 'zoom', 8);
+            ).bind('init', function(event, map) {                
+                map.gmap('addMarker', {'position': position.coords.latitude + ',' + position.coords.longitude, 'bounds': true}).gmap('option', 'zoom', 16);
             });
         }
         function onError(error) {
 			log.error(error.code);
             console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
+        $('#map_canvas').gmap().bind('init', function(event, map) { 
                 navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        });
         $(function() {
        
            google.maps.event.addListenerOnce($('#map_canvas'), 'idle', function(){
