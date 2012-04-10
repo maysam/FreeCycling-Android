@@ -5,20 +5,48 @@
     <script type="application/x-javascript" src="cordova-1.5.0.js"></script>      
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
     <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-ui.min.js"></script>
     <script type="text/javascript" src="jquery.ui.map.full.min.js"></script>
     <script type="text/javascript" src="log4j.js"></script>
     
+	<link rel="stylesheet" href="css/mint-choc/jquery-ui-1.8.18.custom.css" type="text/css" media="all" />
 </head>
 <body>
+    <style>
+        .options_div {
+            background-color:#24334;
+            width: 140px;
+        }
+        .options_div input {
+            width: 120px;
+        } 
+    </style>
+    <script>
+    
+    $(function() {
+        $('option_button').button();
+    });
+    </script>
+    <div id="options_div" class="options_div">
+    <button class="ui-button ui-widget ui-state-default ui-corner-all">
+        <span class="ui-button-text">New Label</span>
+    </button>
+    <button class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all">
+        <span class="ui-button-text">Button Label</span>
+    </button>
+    <button id="new_button" class="ui-button">New Posting</button>
+    <button id="search_button" class="option_button ui-corner-all">Search</button>
+    <button id="view_button" class="option_button">Map View</button>
+    <button id="exit_button" class="option_button">Exit</button>
+    </div>
     <div id="map_canvas" style="height:320px;">map</div>
     under
     <script type="text/javascript">
     	var log = log4javascript.getDefaultLogger();
-
-    var map;
+        var map;
         function onSuccess(position) {
-	log.info("Hello world");
-	log.info(position.coords);
+            log.info("Hello world");
+            log.info(position.coords);
             map = $('#map_canvas').gmap(
                 {
                     'center': position.coords.latitude + ',' + position.coords.longitude,
